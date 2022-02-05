@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Project:Adem</title>
+    <link rel="icon" href="https://user-images.githubusercontent.com/72740879/103412300-76280580-4b85-11eb-8226-47e2efcab2d1.png">
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        #container {
+            height: 100%;
+            width: 100%;
+            background-image: url(https://user-images.githubusercontent.com/72740879/103411852-4e37a280-4b83-11eb-8c56-6f2bc0cdb342.jpg);
+            padding: 10px;
+            font-size: 20px;
+        }
+
+        #title {
+            font-family: cursive;
+            color: darkblue;
+            user-select: none;
+            text-align: center;
+        }
+
+        #button {
+            border: 1px;
+            background: orange;
+            box-shadow: 0 0 10px orange,
+                0 0 60px orange,
+                0 0 200px yellow,
+                inset 0 0 80px yellow;
+            width: 60px;
+            height: 60px;
+            position: absolute;
+            border-radius: 50px;
+        }
+
+        .level {
+            color: white;
+            background-color:darkblue;
+            font-family: cursive;
+            border-radius: 10px;
+            letter-spacing: 2px;
+            font-weight: bold;
+            border-top: 5px solid black;
+            border-left: 5px solid black;
+            transition: all 0.1s;
+            text-align: center;
+        }
+
+        .level:hover {
+            background-color:lightblue;
+        }
+
+        .level:active {
+            border-left: none;
+            border-top: none;
+        }
+
+        .scoreTime {
+            background-color: darkblue;
+            color: white;
+            width: 120px;
+            height: 26px;
+            border-radius: 10px;
+            user-select: none;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+            margin-top: 10px;
+        }
+
+        #desc {
+            color: darkblue;
+            font-family: cursive;
+            font-size: 20px;
+            user-select: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <h1 id="title">CATCHING THE SUN</h1>
+        <button class="level" type="button" id="restart" onclick='location.reload();'>RESTART</button>
+        <button class="level" type="button" id="easy">EASY</button>
+        <button class="level" type="button" id="medium">MEDIUM</button>
+        <button class="level" type="button" id="hard">HARD</button>
+        <button class="level" type="button" id="reflex">REFLEX</button>
+        <p id="desc">Choose a level and catch the sun</p>
+        <button type="button" id="button"></button>
+        <div class="scoreTime" id="score"></div>
+        <div class="scoreTime" id="time">Time left :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    </div>
+
+    <script>
+        document.getElementById("time").hidden=true;
+        var score=document.getElementById('score');
+        score.innerHTML="SCORE";
+        var button = document.querySelector('#button');
+        var div = document.querySelector('div');
+        var en = div.offsetWidth;
+        var boy = div.offsetHeight;
+        var counter;
+        var desc=document.getElementById('desc');
+
+        function changeMode() {
+            document.getElementById('easy').hidden = true;
+            document.getElementById('medium').hidden = true;
+            document.getElementById('hard').hidden = true;
+            document.getElementById('reflex').hidden = true;
+            button.disabled = false;
+            button.style.width = "60px";
+            button.style.height = "60px";
+        }
+
+        function displayTime() {
+            var timeleft = 16;
+            var downloadTimer = setInterval(function () {
+                timeleft--;
+                time.innerHTML = "Time left : " + timeleft;
+                if (timeleft <= 0)
+                    clearInterval(downloadTimer);
+            }, 980)
+        }
+
+        function changeLocation() {
+            counter++;
+            let x = Math.floor(Math.random() * en);
+            let y = Math.floor(Math.random() * boy);
+            if (x > en - 60) { x = en - 60; }
+            if (y > boy - 60) { y = boy - 60; }
+            button.style.left = x + "px";
+            button.style.top = y + "px";
+        }
+
+        document.querySelector('#easy').onclick = function () {
+             desc.innerHTML="Catch the Sun!";
+            counter = 0;
+            changeMode();
+            button.onclick = function () {
+                changeLocation();
+                score.innerHTML="SCORE : " + counter;
+            }
+        }
+
+        document.querySelector('#medium').onclick = function () {
+            document.getElementById("time").hidden=false;
+            displayTime();
+            changeMode();
+            desc.innerHTML="The game has started. What are you waiting for?";
+            counter = 0;
+            score.innerHTML="SCORE : " + counter;
+            setTimeout(() => {
+                button.disabled = true;
+                alert("Your time is up. Your SCORE : " + counter);
+            }, 16000);
+            button.onclick = function () {
+                changeLocation();
+                score.innerHTML="SCORE : " + counter;
+            }
+        }
+
+        document.querySelector('#hard').onclick = function () {
+            document.getElementById("time").hidden=false;
+            displayTime();
+            changeMode();
+            counter = 0;
+            desc.innerHTML="You want to test your limits. Don't you?";
+            score.innerHTML="SCORE : " + counter;
+            setTimeout(() => {
+                button.disabled = true;
+                alert("Your time is up. SCORE : " + counter);
+            }, 16000);
+            button.onclick = function () {
+                changeLocation();
+                button.style.width = this.clientWidth - 5 + "px";
+                button.style.height = this.clientHeight - 5 + "px";
+                score.innerHTML="SCORE : " + counter;
+            }
+        }
+
+        document.querySelector('#reflex').onclick = function () {
+            desc.innerHTML="Let's test your reflexes.";
+            changeMode();
+            button.style.top = "340px";
+            button.style.left = "170px";
+            button.style.visibility = "hidden";
+            let time = (Math.random() * 1000);
+            setTimeout(reflex, time);
+            function reflex() {
+                button.style.visibility = "visible";
+                var start = new Date();
+                button.onclick = function () {
+                    button.style.visibility = "hidden";
+                    var finish = new Date();
+                    console.log(finish - start);
+                    score.innerHTML= (finish - start).toString() + "ms";
+                    let time = (Math.random() * 6000);
+                    setTimeout(reflex, time);
+                }
+            }
+        }  
+    </script>
+</body>
+
+</html>
